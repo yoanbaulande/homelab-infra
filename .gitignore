@@ -1,0 +1,24 @@
+# ── Secrets & fichiers sensibles : JAMAIS dans ce dépôt public ──
+# Kubeconfigs (contiennent des certificats = accès au cluster)
+kubeconfig*
+*.kubeconfig
+.kube/
+
+# Certificats & clés privées
+*.crt
+*.key
+*.pem
+*.csr
+*.srl
+
+# Fichiers d'environnement (mots de passe, tokens)
+.env
+.env.*
+
+# Configuration locale réelle du cluster (contient les vraies IP)
+# La version publique est dans k0s/k0s.yaml (anonymisée)
+/etc/k0s/
+
+# Outils
+*.log
+.DS_Store
