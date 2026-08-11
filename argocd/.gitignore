@@ -1,0 +1,3 @@
+# Manifest officiel ArgoCD — téléchargeable, pas besoin de le versionner
+# https://raw.githubusercontent.com/argoproj/argo-cd/<version>/manifests/install.yaml
+argocd/install.yaml
