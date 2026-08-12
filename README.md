@@ -9,3 +9,8 @@ Mon homelab personnel : un serveur auto-hébergé, administré en GitOps.
 - ArgoCD (GitOps)
 - Tailscale (réseau privé)
 - Hermes (agent d'administration)
+
+## Services
+
+- Uptime Kuma — supervision des services
+- Wealthfolio — suivi de patrimoine personnel
