@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wealthfolio
+  namespace: wealthfolio
+  labels:
+    app: wealthfolio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wealthfolio
+  template:
+    metadata:
+      labels:
+        app: wealthfolio
+    spec:
+      securityContext:
+        # Container non-root (UID 1000 depuis v3.4.0) → le volume doit lui appartenir
+        fsGroup: 1000
+      containers:
+        - name: wealthfolio
+          image: wealthfolio/wealthfolio:3.6.3
+          ports:
+            - name: http
+              containerPort: 8088
+          env:
+            - name: WF_LISTEN_ADDR
+              value: "0.0.0.0:8088"
+            - name: WF_DB_PATH
+              value: "/data/wealthfolio.db"
+            - name: WF_CORS_ALLOW_ORIGINS
+              value: "http://hermes:32002"
+            - name: WF_AUTH_REQUIRED
+              value: "true"
+            - name: WF_AUTH_TOKEN_TTL_MINUTES
+              value: "480"
+            - name: TZ
+              value: "Europe/Paris"
+          envFrom:
+            - secretRef:
+                name: wealthfolio-secrets
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              memory: 512Mi
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8088
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8088
+            initialDelaySeconds: 30
+            periodSeconds: 20
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: wealthfolio-data
